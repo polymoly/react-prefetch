@@ -1,0 +1,16 @@
+
+__tests__/
+examples/
+src/
+.prettierrc
+.gitattributes
+.vscode
+.eslintignore
+.eslintrc.js
+.gitignore
+.npmignore/
+.prettierrc
+babel.config.js
+CODE_OF_CONDUCT.md
+commitlint.config.js
+tsconfig.json

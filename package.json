@@ -1,0 +1,81 @@
+{
+  "name": "react-prefetch",
+  "version": "0.0.1",
+  "description": "A prefetch rendering provider to handling prefetch requests.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepare": "yarn build",
+    "pretest": "yarn build",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "eslint-fix": "eslint src/**/*.ts --fix",
+    "prettier-fix": "prettier --write \"**/*.{ts,tsx}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polymoly/react-prefetch.git"
+  },
+  "keywords": [
+    "react",
+    "react-query",
+    "prefetch"
+  ],
+  "author": "Alireza Hemati",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/polymoly/react-prefetch/issues"
+  },
+  "homepage": "https://github.com/polymoly/react-prefetch#readme",
+  "devDependencies": {
+    "@commitlint/config-conventional": "^8.3.4",
+    "@react-native-community/eslint-config": "1.1.0",
+    "@testing-library/react-hooks": "3.2.1",
+    "@testing-library/react-native": "5.0.3",
+    "@types/fs-extra": "^9.0.4",
+    "@types/invariant": "^2.2.33",
+    "@types/jest": "25.2.3",
+    "@types/react": "16.9.34",
+    "@types/react-native": "0.62.18",
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "babel-jest": "^24.9.0",
+    "babel-preset-react-native": "^4.0.1",
+    "commitlint": "^8.3.5",
+    "cross-env": "^7.0.0",
+    "eslint": "7.3.1",
+    "eslint-plugin-prettier": "3.1.4",
+    "fs-extra": "^9.0.1",
+    "husky": "^4.2.3",
+    "jest": "26.0.1",
+    "meow": "^8.0.0",
+    "plus-base-component": "^1.4.6",
+    "plus-base-core": "^1.4.5",
+    "prettier": "^2.2.1",
+    "prettier-plugin-jsdoc": "^0.3.12",
+    "react": "16.13.1",
+    "react-art": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-jss": "^10.8.2",
+    "react-native": "0.62.2",
+    "react-native-web": "^0.12.1",
+    "react-query": "^3.31.0",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^3.4.0",
+    "react-test-renderer": "16.13.1",
+    "ts-jest": "25.5.1",
+    "typescript": "3.9.7"
+  },
+  "peerDependencies": {
+    "react": ">=16.12",
+    "react-native": ">=0.61"
+  },
+  "dependencies": {
+    "invariant": "^2.2.4"
+  },
+  "files": [
+    "lib"
+  ]
+}
