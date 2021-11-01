@@ -1,6 +1,6 @@
 {
-  "name": "react-prefetch",
-  "version": "0.0.1",
+  "name": "prefetch-rendering",
+  "version": "0.0.2",
   "description": "A prefetch rendering provider to handling prefetch requests.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -77,5 +77,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "directories": {
+    "lib": "lib"
+  }
 }
