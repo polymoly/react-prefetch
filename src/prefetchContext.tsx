@@ -15,7 +15,10 @@ export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
   U extends any,
 >(prefetches: T) {
-  const PrefetchFnContext = createContext<GeneratePrefetches<T, U>>({} as any);
+  const PrefetchFnContext = createContext<{
+    prefetches: GeneratePrefetches<T, U>;
+    isLoading?: boolean;
+  }>({} as any);
 
   const InternalContext = createContext<{
     isLoading?: boolean;
@@ -60,11 +63,12 @@ export function createPrefetchProvider<
     return (
       <InternalContext.Provider value={{ setOnProgress, isLoading }}>
         <PrefetchFnContext.Provider
-          value={
-            Object.fromEntries(
+          value={{
+            prefetches: Object.fromEntries(
               prefetchObjects.map(([key, value]) => [key, value.prefetch]),
-            ) as GeneratePrefetches<T, U>
-          }
+            ) as GeneratePrefetches<T, U>,
+            isLoading,
+          }}
         >
           {children}
         </PrefetchFnContext.Provider>
