@@ -1,6 +1,6 @@
 {
   "name": "prefetch-rendering",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "description": "A prefetch rendering provider to handling prefetch requests.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -67,14 +67,16 @@
     "react-scripts": "^3.4.0",
     "react-test-renderer": "16.13.1",
     "ts-jest": "25.5.1",
-    "typescript": "3.9.7"
+    "typescript": "^4.4.4"
   },
   "peerDependencies": {
     "react": ">=16.12",
     "react-native": ">=0.61"
   },
   "dependencies": {
-    "invariant": "^2.2.4"
+    "invariant": "^2.2.4",
+    "babel-loader": "^8.2.3",
+    "react-app-rewired": "^2.1.8"
   },
   "files": [
     "lib"
