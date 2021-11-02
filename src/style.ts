@@ -4,7 +4,7 @@ import { createUseStyles } from "react-jss";
 export default createUseStyles(
   {
     progress: {
-      position: "fixed",
+      position: "absolute",
       left: 0,
       top: 0,
       height: 4,
