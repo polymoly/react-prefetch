@@ -18,6 +18,6 @@ export type Progress = React.Dispatch<React.SetStateAction<number>>;
 export type GeneratePrefetches<T, U> = {
   [P in keyof T]: {
     prefetch: (variable?: U) => void;
-    variables: U;
+    variables?: U;
   };
 };
