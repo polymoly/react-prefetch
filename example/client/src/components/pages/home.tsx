@@ -1,6 +1,5 @@
-import React from "react";
-import { PrefetchLink } from "prefetch-rendering";
 import { useHistory, Link } from "react-router-dom";
+import { PrefetchLink } from "../../../../../lib";
 import { Progressbar, usePrefetches } from "../../App";
 import useStyles from "./style";
 
@@ -17,7 +16,7 @@ const Home = () => {
         <div>
           <PrefetchLink
             to="/users"
-            onPrefetch={() => usersPrefetch?.({ history })}
+            onPrefetch={() => usersPrefetch.prefetch?.({ history })}
           >
             <button style={{ margin: 4 }}>Routing with prefetch</button>
           </PrefetchLink>

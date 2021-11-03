@@ -10,7 +10,11 @@ const data: User[] = Array.from({ length: 500 }, (_, i) => {
 });
 
 export class UsersService {
-  public get(): User[] {
-    return data;
+  public async get(): Promise<User[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(data);
+      }, Math.random() * 5000);
+    });
   }
 }

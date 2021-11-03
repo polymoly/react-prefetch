@@ -1,9 +1,9 @@
 import React from "react";
 import { useGetUsers } from "../../core/service/hooks";
-import { createPrefetch } from "prefetch-rendering";
 import useStyles from "./style";
 import { client } from "../../appProvider";
 import { useHistory } from "react-router-dom";
+import { createPrefetch } from "../../../../../lib";
 
 const Users = () => {
   const classes = useStyles();
@@ -31,8 +31,10 @@ const prefetch = createPrefetch(async () => {
 
   return {
     promises,
-    onSuccess: (variables?: { history: ReturnType<typeof useHistory> }) =>
-      variables?.history.push("/users"),
+    onSuccess: (variables?: {
+      history: ReturnType<typeof useHistory>;
+      userId?: string;
+    }) => variables?.history.push("/users"),
   };
 });
 Users.prefetch = prefetch;

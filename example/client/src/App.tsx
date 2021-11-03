@@ -2,8 +2,8 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./components/pages/home";
 import { Users } from "./components/pages/users";
-import { createPrefetchProvider } from "prefetch-rendering";
 import "./base";
+import { createPrefetchProvider } from "../../../lib";
 
 const { Provider, Progressbar, usePrefetches } = createPrefetchProvider({
   usersPrefetch: Users.prefetch,

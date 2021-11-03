@@ -1,4 +1,3 @@
-import React from "react";
 import { createContext, useContext, useRef, useState, useEffect } from "react";
 import {
   GeneratePrefetches,
@@ -13,9 +12,15 @@ import useStyles from "./style";
 
 export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
-  U extends any,
->(prefetches: T) {
-  const PrefetchFnContext = createContext<GeneratePrefetches<T, U>>({} as any);
+>(
+  prefetches: T,
+): {
+  Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
+  Progressbar: () => JSX.Element;
+  usePrefetches: () => GeneratePrefetches<T>;
+  useLoading: () => boolean | undefined;
+} {
+  const PrefetchFnContext = createContext<GeneratePrefetches<T>>({} as any);
 
   const InternalContext = createContext<{
     isLoading?: boolean;
@@ -32,6 +37,7 @@ export function createPrefetchProvider<
     const values = useContext(PrefetchFnContext);
     return values;
   };
+
   const useInternalContext = () => {
     const values = useContext(InternalContext);
 
@@ -55,7 +61,6 @@ export function createPrefetchProvider<
     };
 
     const prefetchObjects = generatePrefetches(onProgress);
-
     const loadingArray = prefetchObjects.map(([, { isLoading }]) => {
       return isLoading;
     });
@@ -65,11 +70,7 @@ export function createPrefetchProvider<
     return (
       <InternalContext.Provider value={{ setOnProgress, isLoading }}>
         <PrefetchFnContext.Provider
-          value={
-            Object.fromEntries(
-              prefetchObjects.map(([key, value]) => [key, value.prefetch]),
-            ) as GeneratePrefetches<T, U>
-          }
+          value={Object.fromEntries(prefetchObjects) as GeneratePrefetches<T>}
         >
           {children}
         </PrefetchFnContext.Provider>

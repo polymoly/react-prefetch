@@ -1,11 +1,9 @@
 import { ReactNode } from "react";
-import { useHistory } from "react-router-dom";
-import { ProgressType } from "./usePrefetch";
+import { PrefetchResponse, ProgressType } from "./usePrefetch";
 
-export type Prefetch<T extends any> = (options: {
-  history: ReturnType<typeof useHistory>;
+export type Prefetch<TVariable extends any> = (options: {
   onProgress?: ProgressType;
-  variables?: T;
+  variables?: TVariable;
 }) => Promise<void>;
 
 export interface PrefetchProviderProps {
@@ -15,6 +13,6 @@ export type PrefetchKey = string | number | symbol;
 
 export type Progress = React.Dispatch<React.SetStateAction<number>>;
 
-export type GeneratePrefetches<T, U> = {
-  [P in keyof T]: (variable?: U) => void;
+export type GeneratePrefetches<T extends Record<PrefetchKey, Prefetch<any>>> = {
+  [P in keyof T]: PrefetchResponse<T[P]>;
 };
