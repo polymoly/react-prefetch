@@ -67,10 +67,7 @@ export function createPrefetchProvider<
         <PrefetchFnContext.Provider
           value={
             Object.fromEntries(
-              prefetchObjects.map(([key, { prefetch, variables }]) => [
-                key,
-                { prefetch, variables },
-              ]),
+              prefetchObjects.map(([key, value]) => [key, value.prefetch]),
             ) as GeneratePrefetches<T, U>
           }
         >
