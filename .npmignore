@@ -1,6 +1,6 @@
 
 __tests__/
-examples/
+example/
 src/
 .prettierrc
 .gitattributes
