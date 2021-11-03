@@ -1,10 +1,10 @@
 import { useHistory, Link } from "react-router-dom";
 import { PrefetchLink } from "../../../../../src";
-import { Progressbar, useHooks } from "../../App";
+import { Progressbar, useUsersPrefetch } from "../../App";
 import useStyles from "./style";
 
 const Home = () => {
-  const { prefetch } = useHooks.usersPrefetch();
+  const { prefetch } = useUsersPrefetch();
   const history = useHistory();
   const classes = useStyles();
 

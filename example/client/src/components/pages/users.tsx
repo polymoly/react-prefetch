@@ -4,7 +4,7 @@ import useStyles from "./style";
 import { client } from "../../appProvider";
 import { useHistory } from "react-router-dom";
 import { createPrefetch } from "../../../../../src";
-import { useHooks } from "../../App";
+import { useAccountPrefetch } from "../../App";
 import { User } from "../../core/service/types";
 
 const Users = () => {
@@ -24,7 +24,7 @@ const Users = () => {
 
 const UserComp = ({ id, email, name, status }: User) => {
   const classes = useStyles();
-  const { prefetch, isLoading } = useHooks.accountPrefetch();
+  const { prefetch, isLoading } = useAccountPrefetch();
   const history = useHistory();
 
   return (
@@ -46,10 +46,7 @@ const UserComp = ({ id, email, name, status }: User) => {
 };
 
 const prefetch = createPrefetch(
-  async (variables?: {
-    history: ReturnType<typeof useHistory>;
-    userId?: string;
-  }) => {
+  async (variables?: { history: ReturnType<typeof useHistory> }) => {
     const useGetUsersPrefetch = useGetUsers.prefetch(client);
 
     const promises = [useGetUsersPrefetch];

@@ -26,9 +26,7 @@ export function createPrefetchProvider<
 ): {
   Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
   Progressbar: () => JSX.Element;
-  useHooks: GeneratePrefetches<T>;
-  useLoading: () => boolean | undefined;
-} {
+} & GeneratePrefetches<T> {
   const InternalContext = createContext<{
     isLoading?: boolean;
     setOnProgress: (progressFn?: Progress) => void;
@@ -39,7 +37,7 @@ export function createPrefetchProvider<
   const useHooks = Object.fromEntries(
     Object.entries(prefetches || {}).map(([key, value]) => {
       return [
-        key,
+        `use${key[0].toUpperCase() + key.slice(1)}`,
         () => {
           const { setIsLoading, onProgress } = useInternalContext();
           const { isLoading, ...rest } = usePrefetch(value, onProgress);
@@ -60,12 +58,6 @@ export function createPrefetchProvider<
     const values = useContext(InternalContext);
 
     return values;
-  };
-
-  const useLoading = () => {
-    const { isLoading } = useContext(InternalContext);
-
-    return isLoading;
   };
 
   function Provider({ children }: PrefetchProviderProps) {
@@ -116,7 +108,6 @@ export function createPrefetchProvider<
   return {
     Provider,
     Progressbar,
-    useLoading,
-    useHooks,
+    ...useHooks,
   };
 }

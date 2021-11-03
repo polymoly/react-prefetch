@@ -8,12 +8,16 @@ export type Prefetch<TVariable extends any> = (options: {
 export interface PrefetchProviderProps {
   children: ReactNode;
 }
-export type PrefetchKey = string | number | symbol;
+export type PrefetchKey = string;
+
+type GetString<T> = T extends string ? T : never;
 
 export type Progress = React.Dispatch<React.SetStateAction<number>>;
 
 export type GeneratePrefetches<T extends Record<PrefetchKey, Prefetch<any>>> = {
-  [P in keyof T]: () => PrefetchResponse<T[P]>;
+  [P in keyof T as `use${Capitalize<GetString<P>>}`]: () => PrefetchResponse<
+    T[P]
+  >;
 };
 
 export type GetPrefetchVariable<T extends Prefetch<any>> = T extends Prefetch<
