@@ -17,8 +17,8 @@ import {
 } from "react-query";
 import { RequestError, SwaggerResponse } from "./config";
 import { paginationFlattenData, getPageSize, getTotal } from "./hooksConfig";
-import { User } from "./types";
-import { getUsers } from "./services";
+import { Account, User } from "./types";
+import { getAccounts, getUsers } from "./services";
 
 const useHasMore = (
   pages: Array<SwaggerResponse<any>> | undefined,
@@ -48,6 +48,37 @@ const useHasMore = (
     return false;
   }, [pages, list, queryParams]);
 
+export const useGetAccounts = (
+  options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
+  configOverride?: AxiosRequestConfig,
+) => {
+  const { key, fun } = useGetAccounts.info(options, configOverride);
+  return useQuery<SwaggerResponse<Account[]>, RequestError | Error>(
+    key,
+    () => fun(),
+    options,
+  );
+};
+useGetAccounts.info = (
+  options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
+  configOverride?: AxiosRequestConfig,
+) => {
+  return {
+    key: [getAccounts.key],
+    fun: () => getAccounts(configOverride),
+  };
+};
+useGetAccounts.prefetch = (
+  client: QueryClient,
+  options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
+  configOverride?: AxiosRequestConfig,
+) => {
+  const { key, fun } = useGetAccounts.info(options, configOverride);
+
+  return client.getQueryData([getAccounts.key])
+    ? Promise.resolve()
+    : client.prefetchQuery(key, () => fun(), options);
+};
 export const useGetUsers = (
   options?: UseQueryOptions<SwaggerResponse<User[]>, RequestError | Error>,
   configOverride?: AxiosRequestConfig,

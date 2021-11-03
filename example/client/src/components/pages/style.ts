@@ -20,6 +20,9 @@ export default createUseStyles({
       margin: 4,
     },
   },
+  accountCard: {
+    background: "green",
+  },
   container: {
     display: "flex",
     justifyContent: "space-between",

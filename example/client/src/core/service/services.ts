@@ -7,7 +7,7 @@
 import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
-import { User } from "./types";
+import { Account, User } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const __DEV__ = process.env.NODE_ENV !== "production";
@@ -47,6 +47,21 @@ function objToForm(requestBody: { [name: string]: string | Blob | undefined }) {
 
   return formData;
 }
+
+export const getAccounts = (
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<Account[]>> => {
+  return Http.getRequest(
+    getAccounts.key,
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getAccounts.key = "/accounts";
 
 export const getUsers = (
   configOverride?: AxiosRequestConfig

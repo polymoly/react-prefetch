@@ -3,10 +3,12 @@ import { Switch, Route } from "react-router-dom";
 import Home from "./components/pages/home";
 import { Users } from "./components/pages/users";
 import "./base";
-import { createPrefetchProvider } from "../../../lib";
+import { createPrefetchProvider } from "../../../src";
+import { Accounts } from "./components/pages/accounts";
 
-const { Provider, Progressbar, usePrefetches } = createPrefetchProvider({
+const { Provider, Progressbar, useHooks } = createPrefetchProvider({
   usersPrefetch: Users.prefetch,
+  accountPrefetch: Accounts.prefetch,
 });
 
 function App() {
@@ -15,11 +17,12 @@ function App() {
       <Switch>
         <Route path={"/"} component={Home} exact />
         <Route path={"/users"} component={Users} exact />
+        <Route path={"/accounts"} component={Accounts} exact />
       </Switch>
     </Provider>
   );
 }
 
-export { Progressbar, usePrefetches };
+export { Progressbar, useHooks };
 
 export default App;

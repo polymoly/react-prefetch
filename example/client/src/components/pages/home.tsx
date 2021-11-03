@@ -1,10 +1,10 @@
 import { useHistory, Link } from "react-router-dom";
-import { PrefetchLink } from "../../../../../lib";
-import { Progressbar, usePrefetches } from "../../App";
+import { PrefetchLink } from "../../../../../src";
+import { Progressbar, useHooks } from "../../App";
 import useStyles from "./style";
 
 const Home = () => {
-  const { usersPrefetch } = usePrefetches();
+  const { prefetch } = useHooks.usersPrefetch();
   const history = useHistory();
   const classes = useStyles();
 
@@ -14,10 +14,7 @@ const Home = () => {
       <div className={classes.cardContainer}>
         <h1>Home</h1>
         <div>
-          <PrefetchLink
-            to="/users"
-            onPrefetch={() => usersPrefetch.prefetch?.({ history })}
-          >
+          <PrefetchLink to="/users" onPrefetch={() => prefetch?.({ history })}>
             <button style={{ margin: 4 }}>Routing with prefetch</button>
           </PrefetchLink>
           <Link to="/users">
