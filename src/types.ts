@@ -16,5 +16,8 @@ export type PrefetchKey = string | number | symbol;
 export type Progress = React.Dispatch<React.SetStateAction<number>>;
 
 export type GeneratePrefetches<T, U> = {
-  [P in keyof T]: (variable?: U) => void;
+  [P in keyof T]: {
+    prefetch: (variable?: U) => void;
+    variables: U;
+  };
 };

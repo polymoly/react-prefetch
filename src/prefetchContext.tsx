@@ -30,7 +30,6 @@ export function createPrefetchProvider<
 
   const usePrefetches = () => {
     const values = useContext(PrefetchFnContext);
-
     return values;
   };
   const useInternalContext = () => {
@@ -68,7 +67,10 @@ export function createPrefetchProvider<
         <PrefetchFnContext.Provider
           value={
             Object.fromEntries(
-              prefetchObjects.map(([key, value]) => [key, value.prefetch]),
+              prefetchObjects.map(([key, { prefetch, variables }]) => [
+                key,
+                { prefetch, variables },
+              ]),
             ) as GeneratePrefetches<T, U>
           }
         >
