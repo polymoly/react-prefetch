@@ -54,7 +54,14 @@
           }
         },
         "security": [],
-        "parameters": []
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userId",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ]
       }
     },
     "/users": {
@@ -135,7 +142,14 @@
             }
           },
           "security": [],
-          "parameters": []
+          "parameters": [
+            {
+              "in": "query",
+              "name": "userId",
+              "required": false,
+              "schema": { "type": "string" }
+            }
+          ]
         }
       },
       "/users": {

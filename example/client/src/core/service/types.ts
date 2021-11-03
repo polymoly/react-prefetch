@@ -10,6 +10,10 @@ export interface Account {
   name: string;
 }
 
+export interface GetAccountsQueryParams {
+  userId?: string;
+}
+
 export interface User {
   email: string;
   /** Format: double */

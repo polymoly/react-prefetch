@@ -17,7 +17,7 @@ import {
 } from "react-query";
 import { RequestError, SwaggerResponse } from "./config";
 import { paginationFlattenData, getPageSize, getTotal } from "./hooksConfig";
-import { Account, User } from "./types";
+import { Account, GetAccountsQueryParams, User } from "./types";
 import { getAccounts, getUsers } from "./services";
 
 const useHasMore = (
@@ -49,10 +49,15 @@ const useHasMore = (
   }, [pages, list, queryParams]);
 
 export const useGetAccounts = (
+  queryParams: GetAccountsQueryParams,
   options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
   configOverride?: AxiosRequestConfig,
 ) => {
-  const { key, fun } = useGetAccounts.info(options, configOverride);
+  const { key, fun } = useGetAccounts.info(
+    queryParams,
+    options,
+    configOverride,
+  );
   return useQuery<SwaggerResponse<Account[]>, RequestError | Error>(
     key,
     () => fun(),
@@ -60,22 +65,29 @@ export const useGetAccounts = (
   );
 };
 useGetAccounts.info = (
+  queryParams: GetAccountsQueryParams,
   options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
   configOverride?: AxiosRequestConfig,
 ) => {
   return {
-    key: [getAccounts.key],
-    fun: () => getAccounts(configOverride),
+    key: [getAccounts.key, queryParams],
+    fun: (_param?: GetAccountsQueryParams) =>
+      getAccounts(queryParams, configOverride),
   };
 };
 useGetAccounts.prefetch = (
   client: QueryClient,
+  queryParams: GetAccountsQueryParams,
   options?: UseQueryOptions<SwaggerResponse<Account[]>, RequestError | Error>,
   configOverride?: AxiosRequestConfig,
 ) => {
-  const { key, fun } = useGetAccounts.info(options, configOverride);
+  const { key, fun } = useGetAccounts.info(
+    queryParams,
+    options,
+    configOverride,
+  );
 
-  return client.getQueryData([getAccounts.key])
+  return client.getQueryData([getAccounts.key, queryParams])
     ? Promise.resolve()
     : client.prefetchQuery(key, () => fun(), options);
 };

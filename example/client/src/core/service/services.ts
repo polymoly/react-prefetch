@@ -7,7 +7,7 @@
 import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
-import { Account, User } from "./types";
+import { GetAccountsQueryParams, Account, User } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const __DEV__ = process.env.NODE_ENV !== "production";
@@ -49,11 +49,12 @@ function objToForm(requestBody: { [name: string]: string | Blob | undefined }) {
 }
 
 export const getAccounts = (
+  queryParams: GetAccountsQueryParams,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<Account[]>> => {
   return Http.getRequest(
     getAccounts.key,
-    undefined,
+    queryParams,
     undefined,
     _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)

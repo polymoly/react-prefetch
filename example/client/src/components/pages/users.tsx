@@ -22,13 +22,16 @@ const Users = () => {
   );
 };
 
-const UserComp = ({ email, name, status }: User) => {
+const UserComp = ({ id, email, name, status }: User) => {
   const classes = useStyles();
   const { prefetch, isLoading } = useHooks.accountPrefetch();
   const history = useHistory();
 
   return (
-    <div onClick={() => prefetch({ history })} className={classes.card}>
+    <div
+      onClick={() => prefetch({ history, userId: `${id}` })}
+      className={classes.card}
+    >
       {isLoading ? (
         <h1>loading... </h1>
       ) : (
