@@ -14,7 +14,7 @@ export class UsersService {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(data);
-      }, Math.random() * 5000);
+      }, Math.random() * 10000);
     });
   }
 }

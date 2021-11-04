@@ -1,4 +1,13 @@
-import { createContext, useContext, useRef, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import {
   GeneratePrefetches,
   Prefetch,
@@ -17,26 +26,33 @@ export function createPrefetchProvider<
 ): {
   Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
   Progressbar: () => JSX.Element;
-  usePrefetches: () => GeneratePrefetches<T>;
-  useLoading: () => boolean | undefined;
-} {
-  const PrefetchFnContext = createContext<GeneratePrefetches<T>>({} as any);
-
+} & GeneratePrefetches<T> {
   const InternalContext = createContext<{
     isLoading?: boolean;
     setOnProgress: (progressFn?: Progress) => void;
-  }>({ isLoading: false, setOnProgress: () => null });
+    setIsLoading: Dispatch<SetStateAction<boolean>>;
+    onProgress: (loaded: number) => void;
+  }>(undefined as any);
 
-  const generatePrefetches = (fn: (loaded: number) => void) => {
-    return Object.entries(prefetches || {}).map(([key, value]) => {
-      return [key, usePrefetch(value, fn)] as const;
-    });
-  };
+  const useHooks = Object.fromEntries(
+    Object.entries(prefetches || {}).map(([key, value]) => {
+      return [
+        `use${key[0].toUpperCase() + key.slice(1)}`,
+        () => {
+          const { setIsLoading, onProgress } = useInternalContext();
+          const { isLoading, ...rest } = usePrefetch(value, onProgress);
 
-  const usePrefetches = () => {
-    const values = useContext(PrefetchFnContext);
-    return values;
-  };
+          useLayoutEffect(() => {
+            setIsLoading(Boolean(isLoading));
+
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+          }, [isLoading]);
+
+          return { isLoading, ...rest };
+        },
+      ] as const;
+    }),
+  ) as GeneratePrefetches<T>;
 
   const useInternalContext = () => {
     const values = useContext(InternalContext);
@@ -44,13 +60,8 @@ export function createPrefetchProvider<
     return values;
   };
 
-  const useLoading = () => {
-    const { isLoading } = useContext(InternalContext);
-
-    return isLoading;
-  };
-
   function Provider({ children }: PrefetchProviderProps) {
+    const [isLoading, setIsLoading] = useState(false);
     const onProgressRef = useRef<Progress>();
 
     const onProgress = (loaded: number) => {
@@ -60,20 +71,11 @@ export function createPrefetchProvider<
       onProgressRef.current = progressFn;
     };
 
-    const prefetchObjects = generatePrefetches(onProgress);
-    const loadingArray = prefetchObjects.map(([, { isLoading }]) => {
-      return isLoading;
-    });
-
-    const isLoading = loadingArray.reduce((p, q) => p || q, false);
-
     return (
-      <InternalContext.Provider value={{ setOnProgress, isLoading }}>
-        <PrefetchFnContext.Provider
-          value={Object.fromEntries(prefetchObjects) as GeneratePrefetches<T>}
-        >
-          {children}
-        </PrefetchFnContext.Provider>
+      <InternalContext.Provider
+        value={{ setOnProgress, isLoading, onProgress, setIsLoading }}
+      >
+        {children}
       </InternalContext.Provider>
     );
   }
@@ -106,7 +108,6 @@ export function createPrefetchProvider<
   return {
     Provider,
     Progressbar,
-    usePrefetches,
-    useLoading,
+    ...useHooks,
   };
 }

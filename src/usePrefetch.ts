@@ -1,21 +1,6 @@
 import { useMutation } from "react-query";
 import { useRef } from "react";
-import { Prefetch } from "./types";
-
-export type ProgressType = (loaded: number) => void;
-
-type GetPrefetchVariable<T extends Prefetch<any>> = T extends Prefetch<infer U>
-  ? U
-  : never;
-
-export type PrefetchResponse<T extends Prefetch<any>> = {
-  prefetch: (
-    variables?: GetPrefetchVariable<T>,
-  ) => Promise<GetPrefetchVariable<T> | undefined>;
-  error?: unknown;
-  isLoading?: boolean;
-  variables?: GetPrefetchVariable<T>;
-};
+import { Prefetch, GetPrefetchVariable, PrefetchResponse } from "./types";
 
 export const usePrefetch = <T extends Prefetch<any>>(
   prefetching: T,
