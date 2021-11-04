@@ -9,11 +9,13 @@ import {
   Dispatch,
 } from "react";
 import {
+  CreatePrefetchProviderResponse,
   GeneratePrefetches,
   Prefetch,
   PrefetchKey,
   PrefetchProviderProps,
   Progress,
+  ProgressbarProps,
 } from "./types";
 import { usePrefetch } from "./usePrefetch";
 import { View } from "plus-base-component";
@@ -21,12 +23,7 @@ import useStyles from "./style";
 
 export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
->(
-  prefetches: T,
-): {
-  Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
-  Progressbar: () => JSX.Element;
-} & GeneratePrefetches<T> {
+>(prefetches: T): CreatePrefetchProviderResponse<T> {
   const InternalContext = createContext<{
     isLoading?: boolean;
     setOnProgress: (progressFn?: Progress) => void;
@@ -80,8 +77,11 @@ export function createPrefetchProvider<
     );
   }
 
-  const Progressbar = () => {
-    const classes = useStyles();
+  const Progressbar = ({
+    color = "#27c26c",
+    thickness = 3,
+  }: ProgressbarProps) => {
+    const classes = useStyles({ color, thickness } as any);
     const [progressPercent, setProgressPercent] = useState<number>(0);
 
     const { isLoading, setOnProgress } = useInternalContext();

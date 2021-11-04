@@ -36,3 +36,15 @@ export type PrefetchResponse<T extends Prefetch<any>> = {
 };
 
 export type ProgressType = (loaded: number) => void;
+
+export interface ProgressbarProps {
+  color?: string;
+  thickness?: number;
+}
+
+export type CreatePrefetchProviderResponse<
+  T extends Record<PrefetchKey, Prefetch<any>>,
+> = {
+  Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
+  Progressbar: (props: ProgressbarProps) => JSX.Element;
+} & GeneratePrefetches<T>;
