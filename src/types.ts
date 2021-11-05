@@ -13,8 +13,6 @@ export type PrefetchKey = string;
 
 type GetString<T> = T extends string ? T : never;
 
-export type Progress = React.Dispatch<React.SetStateAction<number>>;
-
 export type GeneratePrefetches<T extends Record<PrefetchKey, Prefetch<any>>> = {
   [P in keyof T as `use${Capitalize<GetString<P>>}`]: (
     options?: Omit<
@@ -53,6 +51,11 @@ export interface ProgressbarProps {
 export type CreatePrefetchProviderResponse<
   T extends Record<PrefetchKey, Prefetch<any>>,
 > = {
+  /** Should be wrap over pages */
   Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
   Progressbar: (props: ProgressbarProps) => JSX.Element;
+  useLoadingContext: () => {
+    isLoading?: boolean | undefined;
+    progress: number;
+  };
 } & GeneratePrefetches<T>;

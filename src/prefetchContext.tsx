@@ -1,9 +1,7 @@
 import {
   createContext,
   useContext,
-  useRef,
   useState,
-  useEffect,
   useLayoutEffect,
   SetStateAction,
   Dispatch,
@@ -14,7 +12,6 @@ import {
   Prefetch,
   PrefetchKey,
   PrefetchProviderProps,
-  Progress,
   ProgressbarProps,
 } from "./types";
 import { usePrefetch } from "./usePrefetch";
@@ -26,10 +23,12 @@ export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
 >(prefetches: T): CreatePrefetchProviderResponse<T> {
   const InternalContext = createContext<{
-    isLoading?: boolean;
-    setOnProgress: (progressFn?: Progress) => void;
     setIsLoading: Dispatch<SetStateAction<boolean>>;
     onProgress: (loaded: number) => void;
+  }>(undefined as any);
+  const LoadingContext = createContext<{
+    isLoading?: boolean;
+    progress: number;
   }>(undefined as any);
 
   const useHooks = Object.fromEntries(
@@ -61,47 +60,42 @@ export function createPrefetchProvider<
 
     return values;
   };
+  const useLoadingContext = () => {
+    return useContext(LoadingContext);
+  };
 
   function Provider({ children }: PrefetchProviderProps) {
     const [isLoading, setIsLoading] = useState(false);
-    const onProgressRef = useRef<Progress>();
+    const [progress, setProgress] = useState(0);
 
     const onProgress = (loaded: number) => {
-      onProgressRef.current?.((pre) => pre + loaded);
-    };
-    const setOnProgress = (progressFn?: Progress) => {
-      onProgressRef.current = progressFn;
+      setProgress((pre) => pre + loaded);
     };
 
     return (
-      <InternalContext.Provider
-        value={{ setOnProgress, isLoading, onProgress, setIsLoading }}
-      >
-        {children}
+      <InternalContext.Provider value={{ onProgress, setIsLoading }}>
+        <LoadingContext.Provider value={{ isLoading, progress }}>
+          {children}
+        </LoadingContext.Provider>
       </InternalContext.Provider>
     );
   }
-
+  /** @todo Should be removed */
+  /** @deprecated */
   const Progressbar = ({
     color = "#27c26c",
     thickness = 3,
   }: ProgressbarProps) => {
     const classes = useStyles({ color, thickness } as any);
-    const [progressPercent, setProgressPercent] = useState<number>(0);
 
-    const { isLoading, setOnProgress } = useInternalContext();
-
-    useEffect(() => {
-      setOnProgress(setProgressPercent);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const { isLoading, progress } = useLoadingContext();
 
     return (
       <View
         className={classes.progress}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          width: `${isLoading ? progressPercent || 10 : 0}%`,
+          width: `${isLoading ? progress || 10 : 0}%`,
           transitionDuration: isLoading ? "1s" : undefined,
           transitionProperty: "width",
           transitionTimingFunction: "ease-out",
@@ -113,6 +107,7 @@ export function createPrefetchProvider<
   return {
     Provider,
     Progressbar,
+    useLoadingContext,
     ...useHooks,
   };
 }
