@@ -5,6 +5,7 @@ import {
   useLayoutEffect,
   SetStateAction,
   Dispatch,
+  useMemo,
 } from "react";
 import {
   CreatePrefetchProviderResponse,
@@ -68,13 +69,21 @@ export function createPrefetchProvider<
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const onProgress = (loaded: number) => {
-      setProgress((pre) => pre + loaded);
-    };
+    const internalValue = useMemo(() => {
+      const onProgress = (loaded: number) => {
+        setProgress((pre) => pre + loaded);
+      };
+
+      return { onProgress, setIsLoading };
+    }, []);
+
+    const loadingValue = useMemo(() => {
+      return { isLoading, progress };
+    }, [isLoading, progress]);
 
     return (
-      <InternalContext.Provider value={{ onProgress, setIsLoading }}>
-        <LoadingContext.Provider value={{ isLoading, progress }}>
+      <InternalContext.Provider value={internalValue}>
+        <LoadingContext.Provider value={loadingValue}>
           {children}
         </LoadingContext.Provider>
       </InternalContext.Provider>
