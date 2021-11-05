@@ -20,6 +20,7 @@ import {
 import { usePrefetch } from "./usePrefetch";
 import { View } from "plus-base-component";
 import useStyles from "./style";
+import { UseMutationOptions } from "react-query";
 
 export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
@@ -35,9 +36,13 @@ export function createPrefetchProvider<
     Object.entries(prefetches || {}).map(([key, value]) => {
       return [
         `use${key[0].toUpperCase() + key.slice(1)}`,
-        () => {
+        (options?: Omit<UseMutationOptions, "mutationFn">) => {
           const { setIsLoading, onProgress } = useInternalContext();
-          const { isLoading, ...rest } = usePrefetch(value, onProgress);
+          const { isLoading, ...rest } = usePrefetch(
+            value,
+            onProgress,
+            options,
+          );
 
           useLayoutEffect(() => {
             setIsLoading(Boolean(isLoading));

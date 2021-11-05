@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { UseMutationOptions } from "react-query";
 
 export type Prefetch<TVariable extends any> = (options: {
   onProgress?: ProgressType;
@@ -15,9 +16,16 @@ type GetString<T> = T extends string ? T : never;
 export type Progress = React.Dispatch<React.SetStateAction<number>>;
 
 export type GeneratePrefetches<T extends Record<PrefetchKey, Prefetch<any>>> = {
-  [P in keyof T as `use${Capitalize<GetString<P>>}`]: () => PrefetchResponse<
-    T[P]
-  >;
+  [P in keyof T as `use${Capitalize<GetString<P>>}`]: (
+    options?: Omit<
+      UseMutationOptions<
+        Parameters<T[P]>[0]["variables"],
+        unknown,
+        Parameters<T[P]>[0]["variables"]
+      >,
+      "mutationFn"
+    >,
+  ) => PrefetchResponse<T[P]>;
 };
 
 export type GetPrefetchVariable<T extends Prefetch<any>> = T extends Prefetch<
