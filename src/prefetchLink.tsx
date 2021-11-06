@@ -6,6 +6,8 @@ export interface PrefetchLinkProps extends LinkProps {
   onPrefetch: () => void;
 }
 
+/** @todo Should be removed */
+/** @deprecated */
 export const PrefetchLink = ({
   onPrefetch,
   children,
