@@ -43,17 +43,11 @@ export type PrefetchResponse<T extends Prefetch<any>> = {
 
 export type ProgressType = (loaded: number) => void;
 
-export interface ProgressbarProps {
-  color?: string;
-  thickness?: number;
-}
-
 export type CreatePrefetchProviderResponse<
   T extends Record<PrefetchKey, Prefetch<any>>,
 > = {
   /** Should be wrap over pages */
   Provider: ({ children }: PrefetchProviderProps) => JSX.Element;
-  Progressbar: (props: ProgressbarProps) => JSX.Element;
   useLoadingContext: () => {
     isLoading?: boolean | undefined;
     progress: number;

@@ -13,11 +13,8 @@ import {
   Prefetch,
   PrefetchKey,
   PrefetchProviderProps,
-  ProgressbarProps,
 } from "./types";
 import { usePrefetch } from "./usePrefetch";
-import { View } from "plus-base-component";
-import useStyles from "./style";
 import { UseMutationOptions } from "react-query";
 
 export function createPrefetchProvider<
@@ -89,33 +86,9 @@ export function createPrefetchProvider<
       </InternalContext.Provider>
     );
   }
-  /** @todo Should be removed */
-  /** @deprecated */
-  const Progressbar = ({
-    color = "#27c26c",
-    thickness = 3,
-  }: ProgressbarProps) => {
-    const classes = useStyles({ color, thickness } as any);
-
-    const { isLoading, progress } = useLoadingContext();
-
-    return (
-      <View
-        className={classes.progress}
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          width: `${isLoading ? progress || 10 : 0}%`,
-          transitionDuration: isLoading ? "1s" : undefined,
-          transitionProperty: "width",
-          transitionTimingFunction: "ease-out",
-        }}
-      />
-    );
-  };
 
   return {
     Provider,
-    Progressbar,
     useLoadingContext,
     ...useHooks,
   };

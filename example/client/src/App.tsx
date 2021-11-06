@@ -7,7 +7,7 @@ import { createPrefetchProvider } from "../../../src";
 import { Accounts } from "./components/pages/accounts";
 import { Routes } from "./core/routes";
 
-const { Provider, Progressbar, useAccountPrefetch, useUsersPrefetch } =
+const { Provider, useAccountPrefetch, useUsersPrefetch, useLoadingContext } =
   createPrefetchProvider({
     usersPrefetch: Users.prefetch,
     accountPrefetch: Accounts.prefetch,
@@ -25,6 +25,6 @@ function App() {
   );
 }
 
-export { Progressbar, useAccountPrefetch, useUsersPrefetch };
+export { useAccountPrefetch, useUsersPrefetch, useLoadingContext };
 
 export default App;
