@@ -1,5 +1,4 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes as Switches, Route } from "react-router-dom";
 import Home from "./components/pages/home";
 import { Users } from "./components/pages/users";
 import "./base";
@@ -16,11 +15,11 @@ const { Provider, useAccountPrefetch, useUsersPrefetch, useLoadingContext } =
 function App() {
   return (
     <Provider>
-      <Switch>
-        <Route path={Routes.Home.template()} component={Home} exact />
-        <Route path={Routes.Users.template()} component={Users} exact />
-        <Route path={Routes.Accounts.template()} component={Accounts} exact />
-      </Switch>
+      <Switches>
+        <Route path={Routes.Home.template()} element={<Home />} />
+        <Route path={Routes.Users.template()} element={<Users />} />
+        <Route path={Routes.Accounts.template()} element={<Accounts />} />
+      </Switches>
     </Provider>
   );
 }

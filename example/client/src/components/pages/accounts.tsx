@@ -2,7 +2,7 @@ import React from "react";
 import { useGetAccounts } from "../../core/service/hooks";
 import useStyles from "./style";
 import { client } from "../../appProvider";
-import { useHistory } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { createPrefetch } from "../../../../../src";
 import { Routes } from "../../core/routes";
 
@@ -25,10 +25,7 @@ const Accounts = () => {
 };
 
 const prefetch = createPrefetch(
-  async (variables?: {
-    history: ReturnType<typeof useHistory>;
-    userId?: string;
-  }) => {
+  async (variables?: { Navigate: typeof Navigate; userId?: string }) => {
     const useGetUsersPrefetch = useGetAccounts.prefetch(client, {
       userId: variables?.userId,
     });
@@ -36,9 +33,9 @@ const prefetch = createPrefetch(
     return {
       promises: [useGetUsersPrefetch],
       onSuccess: () =>
-        variables?.history.push(
-          Routes.Accounts.create({ query: { userId: variables?.userId } }),
-        ),
+        variables?.Navigate({
+          to: Routes.Accounts.create({ query: { userId: variables?.userId } }),
+        }),
     };
   },
 );

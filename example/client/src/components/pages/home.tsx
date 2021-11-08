@@ -1,12 +1,11 @@
-import { useHistory, Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useUsersPrefetch, useLoadingContext } from "../../App";
 import { Progressbar } from "./progressbar";
 import useStyles from "./style";
 
 const Home = () => {
-  const history = useHistory();
   const { prefetch } = useUsersPrefetch({
-    onError: () => history.push("/users"),
+    onError: () => Navigate({ to: "/users" }) as any,
   });
   const classes = useStyles();
   const { progress, isLoading } = useLoadingContext();
@@ -21,7 +20,7 @@ const Home = () => {
             to="/users"
             onClick={(e) => {
               e.preventDefault();
-              prefetch?.({ history });
+              prefetch?.({ Navigate });
             }}
           >
             <button style={{ margin: 4 }}>Routing with prefetch</button>

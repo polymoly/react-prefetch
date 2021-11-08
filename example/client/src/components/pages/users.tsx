@@ -2,7 +2,7 @@ import React from "react";
 import { useGetUsers } from "../../core/service/hooks";
 import useStyles from "./style";
 import { client } from "../../appProvider";
-import { useHistory } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { createPrefetch } from "../../../../../src";
 import { useAccountPrefetch } from "../../App";
 import { User } from "../../core/service/types";
@@ -25,11 +25,10 @@ const Users = () => {
 const UserComp = ({ id, email, name, status }: User) => {
   const classes = useStyles();
   const { prefetch, isLoading } = useAccountPrefetch();
-  const history = useHistory();
 
   return (
     <div
-      onClick={() => prefetch({ history, userId: `${id}` })}
+      onClick={() => prefetch({ Navigate, userId: `${id}` })}
       className={classes.card}
     >
       {isLoading ? (
@@ -46,14 +45,14 @@ const UserComp = ({ id, email, name, status }: User) => {
 };
 
 const prefetch = createPrefetch(
-  async (variables?: { history: ReturnType<typeof useHistory> }) => {
+  async (variables?: { Navigate: typeof Navigate }) => {
     const useGetUsersPrefetch = useGetUsers.prefetch(client);
 
     const promises = [useGetUsersPrefetch];
 
     return {
       promises,
-      onSuccess: () => variables?.history.push("/users"),
+      onSuccess: () => variables?.Navigate({ to: "/users" }),
     };
   },
 );
