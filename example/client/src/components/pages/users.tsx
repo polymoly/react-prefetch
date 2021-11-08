@@ -2,7 +2,7 @@ import React from "react";
 import { useGetUsers } from "../../core/service/hooks";
 import useStyles from "./style";
 import { client } from "../../appProvider";
-import { Navigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { createPrefetch } from "../../../../../src";
 import { useAccountPrefetch } from "../../App";
 import { User } from "../../core/service/types";
@@ -23,12 +23,13 @@ const Users = () => {
 };
 
 const UserComp = ({ id, email, name, status }: User) => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const { prefetch, isLoading } = useAccountPrefetch();
 
   return (
     <div
-      onClick={() => prefetch({ Navigate, userId: `${id}` })}
+      onClick={() => prefetch({ navigate, userId: `${id}` })}
       className={classes.card}
     >
       {isLoading ? (
@@ -45,14 +46,14 @@ const UserComp = ({ id, email, name, status }: User) => {
 };
 
 const prefetch = createPrefetch(
-  async (variables?: { Navigate: typeof Navigate }) => {
+  async (variables?: { navigate: NavigateFunction }) => {
     const useGetUsersPrefetch = useGetUsers.prefetch(client);
 
     const promises = [useGetUsersPrefetch];
 
     return {
       promises,
-      onSuccess: () => variables?.Navigate({ to: "/users" }),
+      onSuccess: () => variables?.navigate("/users"),
     };
   },
 );
