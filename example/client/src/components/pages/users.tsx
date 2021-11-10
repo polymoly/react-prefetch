@@ -1,5 +1,6 @@
 import React from "react";
 import { useGetUsers } from "../../core/service/hooks";
+import { getUsers } from "../../core/service/services";
 import useStyles from "./style";
 import { client } from "../../appProvider";
 import { NavigateFunction, useNavigate } from "react-router-dom";
@@ -48,8 +49,8 @@ const UserComp = ({ id, email, name, status }: User) => {
 const prefetch = createPrefetch(
   async (variables?: { navigate: NavigateFunction }) => {
     const useGetUsersPrefetch = useGetUsers.prefetch(client);
-
     const promises = [useGetUsersPrefetch];
+    await client.cancelMutations();
 
     return {
       promises,
