@@ -33,9 +33,7 @@ export type GetPrefetchVariable<T extends Prefetch<any>> = T extends Prefetch<
   : never;
 
 export type PrefetchResponse<T extends Prefetch<any>> = {
-  prefetch: (
-    variables?: GetPrefetchVariable<T>,
-  ) => Promise<GetPrefetchVariable<T> | undefined>;
+  prefetch: (variables?: GetPrefetchVariable<T>) => void;
   error?: unknown;
   isLoading?: boolean;
   variables?: GetPrefetchVariable<T>;

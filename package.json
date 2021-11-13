@@ -39,8 +39,6 @@
     "@types/jest": "25.2.3",
     "@types/react": "16.9.34",
     "@types/react-native": "0.62.18",
-    "@types/react-router": "^5.1.17",
-    "@types/react-router-dom": "^5.3.2",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
     "@typescript-eslint/parser": "^2.20.0",
     "babel-jest": "^24.9.0",
@@ -57,6 +55,7 @@
     "plus-base-core": "^1.4.5",
     "prettier": "^2.2.1",
     "prettier-plugin-jsdoc": "^0.3.12",
+    "@types/uuid": "^8.3.1",
     "react": "^17.0.2",
     "react-art": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -75,8 +74,10 @@
     "react-native": ">=0.61"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "babel-loader": "^8.2.3",
     "invariant": "^2.2.4",
+    "uuid": "^8.3.2",
     "react-app-rewired": "^2.1.8"
   },
   "files": [

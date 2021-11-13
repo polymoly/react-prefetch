@@ -4,9 +4,7 @@ import App from "./App";
 
 export const client = new QueryClient({
   defaultOptions: {
-    queries: {
-      staleTime: 1000 * 1,
-    },
+    queries: {},
   },
 });
 

@@ -1,21 +1,25 @@
 import { Prefetch } from "./types";
 
-async function successTrigger(
+function successTrigger(
   promises: Promise<any>[],
   oneResolved: (value: any) => void,
   onSuccess: () => void,
+  status: { isCanceled: boolean },
 ) {
   let isInvokeRequest = true;
+
   const timer = setTimeout(() => {
     isInvokeRequest = false;
-    onSuccess();
+    !status.isCanceled && onSuccess();
   }, 20000);
 
-  await promiseRace(promises, oneResolved).then(
-    () => isInvokeRequest && onSuccess(),
-  );
+  const promise = promiseRace(promises, oneResolved).then(() => {
+    clearTimeout(timer);
 
-  clearTimeout(timer);
+    isInvokeRequest && !status.isCanceled && onSuccess();
+  });
+
+  return promise;
 }
 
 async function promiseRace(
@@ -30,19 +34,36 @@ async function promiseRace(
 
   return Promise.all(promises);
 }
+
 export function createPrefetch<T extends any>(
   getPromises: (variables?: T) => Promise<{
     promises: Promise<any>[];
     onSuccess: (variables?: T) => void;
   }>,
 ): Prefetch<T> {
-  return async ({ onProgress, variables }) => {
-    const { promises, onSuccess } = await getPromises(variables);
+  return ({ onProgress, variables }) => {
+    const status = { isCanceled: false };
+    const promise = new Promise<any>(async (resolve, reject) => {
+      try {
+        const { promises, onSuccess } = await getPromises(variables);
+        resolve(
+          await successTrigger(
+            promises,
+            () => onProgress?.(100 / promises?.length),
+            () => onSuccess(variables),
+            status,
+          ),
+        );
+      } catch (e) {
+        reject(e);
+      }
+    });
 
-    return successTrigger(
-      promises,
-      () => onProgress?.(100 / promises?.length),
-      () => onSuccess(variables),
-    );
+    //@ts-ignore
+    promise.cancel = () => {
+      status.isCanceled = true;
+    };
+
+    return promise;
   };
 }

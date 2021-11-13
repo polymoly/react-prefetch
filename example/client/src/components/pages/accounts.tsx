@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetAccounts } from "../../core/service/hooks";
 import useStyles from "./style";
 import { client } from "../../appProvider";
@@ -9,7 +8,12 @@ import { Routes } from "../../core/routes";
 const Accounts = () => {
   const classes = useStyles();
   const { userId } = Routes.Accounts.useQueryParams();
-  const { data: { data } = {}, isLoading } = useGetAccounts({ userId });
+  const { data: { data } = {}, isLoading } = useGetAccounts(
+    { userId },
+    {
+      staleTime: 1000,
+    },
+  );
 
   return isLoading ? (
     <h1>loading ...</h1>
@@ -29,7 +33,6 @@ const prefetch = createPrefetch(
     const useGetUsersPrefetch = useGetAccounts.prefetch(client, {
       userId: variables?.userId,
     });
-
     return {
       promises: [useGetUsersPrefetch],
       onSuccess: () =>

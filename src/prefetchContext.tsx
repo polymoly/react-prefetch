@@ -15,7 +15,7 @@ import {
   PrefetchProviderProps,
 } from "./types";
 import { usePrefetch } from "./usePrefetch";
-import { UseMutationOptions } from "react-query";
+import { QueryKey, UseQueryOptions } from "react-query";
 
 export function createPrefetchProvider<
   T extends Record<PrefetchKey, Prefetch<any>>,
@@ -33,7 +33,12 @@ export function createPrefetchProvider<
     Object.entries(prefetches || {}).map(([key, value]) => {
       return [
         `use${key[0].toUpperCase() + key.slice(1)}`,
-        (options?: Omit<UseMutationOptions, "mutationFn">) => {
+        (
+          options?: Omit<
+            UseQueryOptions<any, "prefetch-query", any, QueryKey>,
+            "queryFn" | "cacheTime" | "enabled"
+          >,
+        ) => {
           const { setIsLoading, onProgress } = useInternalContext();
           const { isLoading, ...rest } = usePrefetch(
             value,

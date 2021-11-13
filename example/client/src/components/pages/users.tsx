@@ -50,7 +50,6 @@ const prefetch = createPrefetch(
   async (variables?: { navigate: NavigateFunction }) => {
     const useGetUsersPrefetch = useGetUsers.prefetch(client);
     const promises = [useGetUsersPrefetch];
-    await client.cancelMutations();
 
     return {
       promises,
